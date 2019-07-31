@@ -5,12 +5,37 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     <UserSecretsId>bb691cd4-f190-4ec7-8d38-e51978818410</UserSecretsId>
+    <TypeScriptToolsVersion>3.5</TypeScriptToolsVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="src\index.tsx" />
+    <None Remove="src\utility\baseUtil.tsx" />
+    <None Remove="src\utility\hubUtil.tsx" />
+    <None Remove="typings\loaderSpinner.d.ts" />
+    <None Remove="typings\thought.d.ts" />
+  </ItemGroup>
 
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.4.10" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <TypeScriptCompile Include="src\index.tsx" />
+    <TypeScriptCompile Include="src\utility\baseUtil.tsx" />
+    <TypeScriptCompile Include="src\utility\hubUtil.tsx" />
+    <TypeScriptCompile Include="typings\loaderSpinner.d.ts" />
+    <TypeScriptCompile Include="typings\thought.d.ts" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="src\components\" />
   </ItemGroup>
 
 </Project>

@@ -9,11 +9,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="src\components\thoughtComponent.tsx" />
     <None Remove="src\index.tsx" />
     <None Remove="src\utility\baseUtil.tsx" />
     <None Remove="src\utility\hubUtil.tsx" />
     <None Remove="typings\loaderSpinner.d.ts" />
     <None Remove="typings\thought.d.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="compilerconfig.json" />
   </ItemGroup>
 
 
@@ -26,6 +35,7 @@
 
 
   <ItemGroup>
+    <TypeScriptCompile Include="src\components\thoughtComponent.tsx" />
     <TypeScriptCompile Include="src\index.tsx" />
     <TypeScriptCompile Include="src\utility\baseUtil.tsx" />
     <TypeScriptCompile Include="src\utility\hubUtil.tsx" />
@@ -35,7 +45,7 @@
 
 
   <ItemGroup>
-    <Folder Include="src\components\" />
+    <None Include="compilerconfig.json" />
   </ItemGroup>
 
 </Project>

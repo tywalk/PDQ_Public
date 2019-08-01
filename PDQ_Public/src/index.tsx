@@ -5,6 +5,8 @@ import { BaseReactPageBasicHandleLoad } from './utility/baseUtil'
 import { HubUtility } from './utility/hubUtil';
 import { Button } from 'react-bootstrap';
 import LoadingOverlay from 'react-loading-overlay'
+import "./css/main.css";
+import { Thought } from './components/thoughtComponent';
 
 interface IResponse extends Array<any> {
     thought: IThought;
@@ -58,22 +60,17 @@ class ThoughtsController extends BaseReactPageBasicHandleLoad<{}, IThoughtsState
     onRender() {
         if (!this.state) return <div style={{ marginTop: '40px' }}></div>;
         let { thought, locked } = this.state;
-        return (<div>
+        return (<div style={{ height: '100%' }}>
             <LoadingOverlay active={locked} spinner text="Loading">
-                <h2 className="ms-app-header" style={{ width: '100%', zIndex: 1000 }}>PDQ</h2>
-                <div className="ms-Grid" dir="ltr" style={{ background: "radial-gradient(circle at 50% 50%,#229cc0 0,#00627e 100%)" }}>
-                    <div className="col-Grid-row">
-                        <img src={thought && thought.photo} />
-                        <p>Name: {thought && thought.name}</p>
-                        <p>Beer: {thought && thought.currentBeer}</p>
-                        <p>Thought: {thought && thought.currentThought}</p>
-                        <p>Daydream: {thought && thought.daydream}</p>
-                        <img src={thought && thought.daydream} />
+                <h2 className="app-header">PDQ</h2>
+                <div className="app-container">
+                    {thought ? <Thought thought={thought} /> :
+                        <div style={{ textAlign: 'center' }}>
+                        </div>
+                    }
+                    <div style={{ textAlign: 'center' }}>
+                        <Button className="just-send-it text-center" variant="dark" onClick={this.onSend}>Contact Brain</Button>
                     </div>
-                    <Button onClick={this.onSend}>Send</Button>
-                </div>
-                <div style={{ marginTop: '40px' }}>
-
                 </div>
             </LoadingOverlay>
         </div>);

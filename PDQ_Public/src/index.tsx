@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { IThought } from '../typings/thought';
 import { BaseReactPageBasicHandleLoad } from './utility/baseUtil'
 import { HubUtility } from './utility/hubUtil';
-import { Button } from 'react-bootstrap';
+import { Button, Nav, Navbar, NavbarBrand } from 'react-bootstrap';
 import LoadingOverlay from 'react-loading-overlay'
 import "./css/main.css";
 import { Thought } from './components/thoughtComponent';
@@ -52,6 +52,10 @@ class ThoughtsController extends BaseReactPageBasicHandleLoad<{}, IThoughtsState
         this.setState({ thought });
     }
 
+    goHome = () => {
+        this.setState({ thought: null as any });
+    }
+
     onSend = async () => {
         await this.state.hub.getThought();
         //this.setState({ thought });
@@ -60,20 +64,31 @@ class ThoughtsController extends BaseReactPageBasicHandleLoad<{}, IThoughtsState
     onRender() {
         if (!this.state) return <div style={{ marginTop: '40px' }}></div>;
         let { thought, locked } = this.state;
-        return (<div style={{ height: '100%' }}>
-            <LoadingOverlay active={locked} spinner text="Loading">
-                <h2 className="app-header">PDQ</h2>
+        return (
+            <LoadingOverlay active={locked} spinner text="Retrieving Thought From Brain...">
+                <Navbar bg="dark" variant="dark" style={{ position: 'fixed', width: '100%' }}>
+                    <Navbar.Brand onClick={this.goHome} href="#home">PDQ</Navbar.Brand>
+                    {thought &&
+                        <Nav className="mr-auto">
+                            <Nav.Link><Button className="just-send-it text-center" variant="dark" onClick={this.onSend}>Contact Brain <i className="fa fa-brain"></i></Button></Nav.Link>
+                        </Nav>
+                    }
+                </Navbar>
                 <div className="app-container">
                     {thought ? <Thought thought={thought} /> :
-                        <div style={{ textAlign: 'center' }}>
+                        <div style={{ textAlign: 'center', paddingTop: '50px' }}>
+                            <h2>Welcome to the Cabalistic Necromancer Interface</h2>
+                            <i>Built With the Talismanic Formula</i>
+                            <p style={{ marginTop: '50px' }}>This interface is meant to pick the brain for thoughts...</p>
+                            <p style={{ marginTop: '50px' }}>To get started, click "Contact Brain" and let the CN do its work.</p>
+                            <div style={{ margin: '50px' }}>
+                                <Button className="just-send-it text-center" variant="dark" onClick={this.onSend}>Contact Brain <i className="fa fa-brain"></i></Button>
+                            </div>
                         </div>
                     }
-                    <div style={{ textAlign: 'center' }}>
-                        <Button className="just-send-it text-center" variant="dark" onClick={this.onSend}>Contact Brain</Button>
-                    </div>
                 </div>
             </LoadingOverlay>
-        </div>);
+        );
     }
 }
 

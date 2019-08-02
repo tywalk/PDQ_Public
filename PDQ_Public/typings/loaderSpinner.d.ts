@@ -8,7 +8,12 @@
         classNamePrefix?: string;
         spinner: boolean | Node;
         text?: string;
-        styles?: string;
+        styles?: {
+            content?: React.CSSProperties,
+            wrapper?: React.CSSProperties,
+            overlay?: React.CSSProperties,
+            spinner?: React.CSSProperties
+        };
     }
     export default LoadingOverlay;
 }

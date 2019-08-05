@@ -1,8 +1,5 @@
 ﻿using PDQ_Public.Client;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PDQ_Public.Models
 {
@@ -15,7 +12,9 @@ namespace PDQ_Public.Models
         {
             SetSrcs();
         }
-
+        /// <summary>
+        /// Singleton instance of Brain.
+        /// </summary>
         public static Brain Stem
         {
             get
@@ -33,7 +32,10 @@ namespace PDQ_Public.Models
                 return _brainInstance;
             }
         }
-
+        /// <summary>
+        /// Retrieves thought from client.
+        /// </summary>
+        /// <returns></returns>
         public Thought GetThought()
         {
             lock (Mutex)
@@ -42,14 +44,20 @@ namespace PDQ_Public.Models
                 return client.GetThought();
             }
         }
-
+        /// <summary>
+        /// Get and set employee photo srcs.
+        /// </summary>
         private void SetSrcs()
         {
             var client = new HubClient();
             var srcs = client.GetPhotoSrcs();
             _srcs = srcs;
         }
-
+        /// <summary>
+        /// Returns photo src if exists.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public string GetEmployeePhoto(string name)
         {
             if (string.IsNullOrWhiteSpace(name) || !_srcs.ContainsKey(name)) return string.Empty;

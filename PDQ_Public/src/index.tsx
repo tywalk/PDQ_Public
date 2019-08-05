@@ -12,7 +12,6 @@ interface IResponse extends Array<any> {
     thought: IThought;
 }
 
-
 interface IThoughtsState {
     hub: HubUtility<IResponse[]>;
     name: string;
@@ -25,42 +24,48 @@ interface IThoughtsState {
 
 class ThoughtsController extends BaseReactPageBasicHandleLoad<{}, IThoughtsState>{
     static defaultProps = {}
+    /** Triggered on load. */
     async handleLoad() {
-        await setTimeout(() => { }, 1000);
+        await setTimeout(() => { }, 1000); //Wait for a second to make sure everything is loaded
+
+        //Initialize hub utility, which sets all of the hub events and their corresponding handlers
         let hub = new HubUtility(this.onConnected, this.onReceive, "broadcastMessage", {
             "locked": this.onLock, "thoughtResponse": this.retrieveInit
         });
         this.setState({ hub, name });
     }
+    /** Event handler to send the getThought request. */
     onReceive(responses: IResponse[]) {
         if (typeof responses === "string") {
             alert(responses);
             return;
         }
     }
+    /** Event handler to send the getThought request. */
     onConnected = (e: any) => {
         console.log("Connected!");
     }
+    /** Event handler to send the getThought request. */
     onLock = (locked: boolean) => {
         locked ?
             console.log("locked") : console.log("unlocked");
         this.setState({ locked });
     }
+    /** Sets the current thought.
+     * Triggered from hub.
+     * @param thought thought retrieved from brain. */
     retrieveInit = (thought: IThought) => {
-        console.log(JSON.stringify(thought));
-
+        //console.log(JSON.stringify(thought));
         this.setState({ thought });
     }
-
+    /** Event handler to load initial page. */
     goHome = () => {
         this.setState({ thought: null as any });
     }
-
+    /** Event handler to send the getThought request. */
     onSend = async () => {
         await this.state.hub.getThought();
-        //this.setState({ thought });
     }
-
     onRender() {
         if (!this.state) return <div style={{ marginTop: '40px' }}></div>;
         let { thought, locked } = this.state;

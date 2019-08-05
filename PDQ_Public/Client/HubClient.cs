@@ -2,7 +2,6 @@
 using PDQ_Public.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -20,14 +19,20 @@ namespace PDQ_Public.Client
         {
             _client.Dispose();
         }
-
+        /// <summary>
+        /// Retrieves thought.
+        /// </summary>
+        /// <returns></returns>
         public Thought GetThought()
         {
             var task = GetThoughtAsync();
             task.Wait();
             return task.Result;
         }
-
+        /// <summary>
+        /// Asynchronous thought retrieval.
+        /// </summary>
+        /// <returns></returns>
         private async Task<Thought> GetThoughtAsync()
         {
             var response = await _client.GetAsync("https://pdqweb.azurewebsites.net/api/brain");
@@ -36,15 +41,21 @@ namespace PDQ_Public.Client
                 var thought = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<Thought>(thought);
             }
-            return new Thought();
+            return new Thought(); //Empty means an error response
         }
-
+        /// <summary>
+        /// Retrieves employee photo srcs.
+        /// </summary>
+        /// <returns></returns>
         public Dictionary<string, string> GetPhotoSrcs()
         {
             return GetPhotoSrcsAsync().Result;
         }
-
-
+        /// <summary>
+        /// Maps links from html source to a dictionary.
+        /// </summary>
+        /// <param name="htmlSource"></param>
+        /// <returns>Dictionary of srcs.</returns>
         private Dictionary<string, string> FetchLinksFromSource(string htmlSource)
         {
             var links = new Dictionary<string, string>();
@@ -59,7 +70,10 @@ namespace PDQ_Public.Client
             }
             return links;
         }
-
+        /// <summary>
+        /// Retrieves html content from site.
+        /// </summary>
+        /// <returns></returns>
         private async Task<Dictionary<string, string>> GetPhotoSrcsAsync()
         {
             var response = await _client.GetAsync("https://www.pdq.com/about-us/");

@@ -1,8 +1,7 @@
 ﻿import * as React from 'react';
 import LoadingOverlay from 'react-loading-overlay'
-//import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/components/Spinner';
-//import { Overlay } from 'office-ui-fabric-react/lib/components/Overlay';
 
+/** Wraps async load. */
 export abstract class BaseReactPage<P, S> extends React.Component<P, S>
 {
     wrapRefreshPage = (promise: Promise<any>) => {
@@ -18,15 +17,16 @@ export abstract class BaseReactPage<P, S> extends React.Component<P, S>
     }
     abstract onRender(): React.ReactNode;
 
+    /** Actual render. */
     public render() {
         if (!this.state)
-            //return <Spinner size={SpinnerSize.large} />
             return <LoadingOverlay active={true} spinner text="Loading"></LoadingOverlay>
         return this.onRender();
     }
 }
 
 interface LoadingState { loaded: boolean, loading?: boolean }
+/** Handles async loading with a loading wrapper. */
 export abstract class BaseReactPageLoaded<P = {}, S = {}> extends BaseReactPage<P, S extends LoadingState ? S : (LoadingState & S)>
 {
     defaultProps = { spinnerHeight: 80, spinnerWidth: 80, loadingText: "Loading...", spinnerMarginTop: 40 };
@@ -35,17 +35,16 @@ export abstract class BaseReactPageLoaded<P = {}, S = {}> extends BaseReactPage<
         if (this.onLoad)
             await this.onLoad();
     }
-
+    /** Actual render. */
     public render() {
-        let { loadingText, spinnerMarginTop, spinnerHeight, spinnerWidth } = this.defaultProps;
-        //return this.onRender();
+        let { loadingText, spinnerMarginTop } = this.defaultProps;
         if (!this.state || !this.state.loaded) {
             return <div style={{ marginTop: spinnerMarginTop }}><LoadingOverlay active={true} spinner text={loadingText}></LoadingOverlay></div>;
         }
         let { loading } = this.state;
         let contents: React.ReactNode;
         try {
-            contents = this.onRender();
+            contents = this.onRender(); //Trigger callback
         } catch (e) {
             alert(e);
             loading = true;
@@ -56,7 +55,7 @@ export abstract class BaseReactPageLoaded<P = {}, S = {}> extends BaseReactPage<
         return contents;
     }
 }
-
+/** Base class to handle initial async loading. */
 export abstract class BaseReactPageBasicHandleLoad<P = {}, S = {}> extends BaseReactPageLoaded<P, S extends { loaded?: boolean } ? S : (S & { loaded?: boolean })>
 {
     abstract handleLoad(): Promise<boolean | void> | void;

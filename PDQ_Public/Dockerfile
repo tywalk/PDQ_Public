@@ -17,6 +17,9 @@ RUN dotnet build "PDQ_Public.csproj" -c Release -o /app
 FROM build AS publish
 RUN dotnet publish "PDQ_Public.csproj" -c Release -o /app
 
+RUN npm install --no-progress --ignore-optional
+RUN npm run release
+
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
